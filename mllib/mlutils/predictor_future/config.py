@@ -1,0 +1,16 @@
+cfg = dict(
+    batch_size=32,
+    read_size=256,
+    crop_size=235,
+    net_size=224,
+    LR=1e-4,
+    epochs=30,
+    rot=180.0,
+    shr=2.0,
+    hzoom=8.0,
+    wzoom=8.0,
+    hshift=8.0,
+    wshift=8.0,
+    tta_steps=15,
+    es_patience=4,
+)
