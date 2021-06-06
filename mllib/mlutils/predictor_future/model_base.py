@@ -34,8 +34,6 @@ class Predictor:
 
     @staticmethod
     def plot_confusion_matrix(real, pred):
-        print(real)
-        print(pred)
         cmn = confusion_matrix(real, pred)
         cmn = cmn.astype('float') / cmn.sum(axis=1)[:, np.newaxis]
         print(cmn)
@@ -93,20 +91,15 @@ class Predictor:
             map(lambda x: self.loaded_model(np.array([self.prepare(np.array(x).reshape(224, 224, 3))]))[0], images))
         return list(map(lambda x: 1 if x > threshold else 0, predictions))
 
-    def evaluate_sens_spec(self, dataset_folder, threshold=0.4, malignant_samples=500, benign_samples=1500):
-        benign = list(map(lambda x: os.path.join(dataset_folder, 'benign', x),
-                          os.listdir(os.path.join(dataset_folder, 'benign'))))
-        malignant = list(map(lambda x: os.path.join(dataset_folder, 'malignant', x),
-                             os.listdir(os.path.join(dataset_folder, 'malignant'))))
-        real = [0] * len(benign[:benign_samples]) + [1] * len(malignant[:malignant_samples])
-        mal = self.predict_batch(malignant[:malignant_samples], threshold)
-        ben = self.predict_batch(benign[:benign_samples], threshold)
-        predicted = mal + ben
-
+    def evaluate_sens_spec(self, predicted, real):
         self.plot_confusion_matrix(real, predicted)
 
-    def evaluate(self, dataset_folder, threshold=0.3, malignant_samples=500, benign_samples=1500):
+    @staticmethod
+    def evaluate_acc(mal, ben):
+        correct = mal.count(1) + ben.count(0)
+        return correct / (len(mal) + len(ben))
 
+    def evaluate_full(self, dataset_folder, threshold=0.3, malignant_samples=500, benign_samples=1500):
         benign = list(map(lambda x: os.path.join(dataset_folder, 'benign', x),
                           os.listdir(os.path.join(dataset_folder, 'benign'))))[:2000]
         malignant = list(map(lambda x: os.path.join(dataset_folder, 'malignant', x),
@@ -114,13 +107,17 @@ class Predictor:
 
         mal = self.predict_batch(malignant[:malignant_samples], threshold)
         ben = self.predict_batch(benign[:benign_samples], threshold)
+        predicted = mal + ben
+        real = [0] * len(benign[:benign_samples]) + [1] * len(malignant[:malignant_samples])
+        self.evaluate_sens_spec(predicted, real)
 
-        correct = mal.count(1) + ben.count(0)
-        return correct / (malignant_samples + benign_samples)
+        return self.evaluate_acc(mal, ben)
+
+
 
 
 # Usage:
 predictor = Predictor(CFG, model_path="checkpoints/checkpoint_4.h5")
 # print(predictor.predict("../../organized_data/benign/ISIC_0074542.png"))
 # predictor.evaluate_sens_spec("../../organized_data", 0.3)
-print(predictor.evaluate("../../organized_data", 0.3))
+print(predictor.evaluate_full("../../organized_data", 0.15))
