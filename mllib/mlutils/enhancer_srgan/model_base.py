@@ -1,3 +1,4 @@
+import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -125,8 +126,10 @@ class SRGAN:
         vgg = VGG19(input_shape=(None, None, 3), include_top=False)
         return Model(vgg.input, vgg.layers[output_layer].output)
 
-    def enhance(self, image_path):
+    def enhance(self, image_path, decrease_channels=False):
         image = np.array(Image.open(image_path))
+        if decrease_channels:
+            image = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
         sr = self.resolve_single(self.model, image)
         return sr
 
@@ -147,5 +150,5 @@ class SRGAN:
 
 # Usage:
 # sr_gan = SRGAN(path="checkpoints/srgan/gan_generator.h5")
-# sr_gan.compare(np.array(Image.open("../../organized_data/benign/ISIC_0015719.png")),
-#                sr_gan.enhance("../../organized_data/benign/ISIC_0015719.png"))
+# sr_gan.compare(np.array(Image.open("marek.png")),
+#                sr_gan.enhance("marek.png", decrease_channels=True))
