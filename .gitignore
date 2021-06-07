@@ -9,6 +9,7 @@ swapfile/
 .idea/
 mllib/data/*
 mllib/organized_data/*
+mllib/enhancer_dataset/*
 node_modules/
 package-lock.json
 csv_data/
