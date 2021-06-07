@@ -148,7 +148,3 @@ class SRGAN:
             plt.yticks([])
         plt.show()
 
-# Usage:
-sr_gan = SRGAN(path="checkpoints/srgan/gan_generator.h5")
-sr_gan.compare(np.array(Image.open("/Users/martingano/repos/awesome-skin-vision/mllib/benchmark_dataset/benign/lr/ISIC_0075914.png")),
-               sr_gan.enhance("/Users/martingano/repos/awesome-skin-vision/mllib/benchmark_dataset/benign/lr/ISIC_0075914.png", decrease_channels=True))
