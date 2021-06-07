@@ -10,6 +10,8 @@ swapfile/
 mllib/data/*
 mllib/organized_data/*
 mllib/enhancer_dataset/*
+mllib/benchmark_dataset/*
+mllib/benchmark_dataset
 node_modules/
 package-lock.json
 csv_data/
@@ -21,3 +23,4 @@ mllib/mlutils/predictor_simple/data
 mllib/mlutils/predictor_simple/logs
 mllib/mlutils/predictor_simple/train-cached-data*
 mllib/mlutils/predictor_simple/weights/
+/mllib/benchmark_dataset/

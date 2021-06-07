@@ -18,6 +18,7 @@ def get_files(input_folder):
 def generate_dataset(input_folder, output_folder):
     benign = get_files(os.path.join(input_folder, 'benign'))
     malignant = get_files(os.path.join(input_folder, 'malignant'))
+
     for image_path in benign + malignant:
         image_name = image_path.replace(
             input_folder, "").replace(".png", "").replace("/", "").replace("benign", "").replace("malignant", "")
