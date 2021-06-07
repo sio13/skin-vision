@@ -95,15 +95,19 @@ class Predictor:
         self.plot_confusion_matrix(real, predicted)
 
     @staticmethod
+    def get_files(input_folder):
+        return list(map(lambda x: os.path.join(input_folder, x), os.listdir(input_folder)))
+
+    @staticmethod
     def evaluate_acc(mal, ben):
         correct = mal.count(1) + ben.count(0)
         return correct / (len(mal) + len(ben))
 
     def evaluate_full(self, dataset_folder, threshold=0.3, malignant_samples=500, benign_samples=1500):
         benign = list(map(lambda x: os.path.join(dataset_folder, 'benign', x),
-                          os.listdir(os.path.join(dataset_folder, 'benign'))))[:2000]
+                          os.listdir(os.path.join(dataset_folder, 'benign'))))[:benign_samples]
         malignant = list(map(lambda x: os.path.join(dataset_folder, 'malignant', x),
-                             os.listdir(os.path.join(dataset_folder, 'malignant'))))
+                             os.listdir(os.path.join(dataset_folder, 'malignant'))))[:malignant_samples]
 
         mal = self.predict_batch(malignant[:malignant_samples], threshold)
         ben = self.predict_batch(benign[:benign_samples], threshold)
@@ -113,7 +117,16 @@ class Predictor:
 
         return self.evaluate_acc(mal, ben)
 
+    def evaluate_resolution(self, resolution="hr", threshold=0.08):
+        benign = self.get_files(os.path.join("../../benchmark_dataset", "benign", resolution))
+        malignant = self.get_files(os.path.join("../../benchmark_dataset", "malignant", resolution))
+        mal = self.predict_batch(malignant, threshold)
+        ben = self.predict_batch(benign, threshold)
+
+        return self.evaluate_acc(mal, ben)
+
 
 # Usage:
 predictor = Predictor(CFG, model_path="checkpoints/checkpoint_4.h5")
-print(predictor.evaluate_full("../../organized_data", 0.08))
+# print(predictor.evaluate_full("../../organized_data", 0.025))  # 0.08 for best acc
+print(predictor.evaluate_resolution(resolution='hr_bicubic'))
