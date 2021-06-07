@@ -36,6 +36,6 @@ def create_enhanced_dataset(input_folder, output_folder):
 # sr_gan.compare(np.array(Image.open("marek.png")),
 #                sr_gan.enhance("marek.png", decrease_channels=True))
 
-input_folder = lambda x: f"../../benchmark_dataset/{x}/lr"
-output_folder = lambda x: f"../../benchmark_dataset/{x}/sr"
+input_folder = lambda x: f"../../benchmark_dataset/{x}/lr_x4"
+output_folder = lambda x: f"../../benchmark_dataset/{x}/sr_x4"
 create_enhanced_dataset(input_folder, output_folder)

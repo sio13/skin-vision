@@ -129,4 +129,4 @@ class Predictor:
 # Usage:
 predictor = Predictor(CFG, model_path="checkpoints/checkpoint_4.h5")
 # print(predictor.evaluate_full("../../organized_data", 0.025))  # 0.08 for best acc
-print(predictor.evaluate_resolution(resolution='sr'))
+print(predictor.evaluate_resolution(resolution='sr_x4'))
