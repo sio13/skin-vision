@@ -114,10 +114,6 @@ class Predictor:
         return self.evaluate_acc(mal, ben)
 
 
-
-
 # Usage:
 predictor = Predictor(CFG, model_path="checkpoints/checkpoint_4.h5")
-# print(predictor.predict("../../organized_data/benign/ISIC_0074542.png"))
-# predictor.evaluate_sens_spec("../../organized_data", 0.3)
-print(predictor.evaluate_full("../../organized_data", 0.15))
+print(predictor.evaluate_full("../../organized_data", 0.08))
